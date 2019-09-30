@@ -1,0 +1,8 @@
+https://pixabay.com/illustrations/supermarket-shelf-food-cereal-1094817/
+
+Image changed to grayscale.  If the product group was too dark for the demo text on the right hand side,
+it is now lighter.  The transformations are shown in :
+1) Original: modules\WebApp\wwwroot\images\supermarket-shelf_pixabay_orig.png
+2) Reduced size: modules\WebApp\wwwroot\images\supermarket-shelf_1024px_pixabay.jpg
+3) Grayscale: modules\WebApp\wwwroot\images\supermarket-shelf_1024px_gray_pixabay.jpg 
+4) Lighter products on right side for font readability with module demo: modules\WebApp\wwwroot\images\supermarket-shelf_1024px_gray_void_pixabay.jpg

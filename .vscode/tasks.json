@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "buildWebAppModule",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/modules/WebApp/WebApp.csproj"
+            ],
+            "problemMatcher": "$msCompile"
+        }
+    ]
+}

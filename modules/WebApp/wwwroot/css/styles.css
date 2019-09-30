@@ -1,0 +1,41 @@
+.wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-auto-rows: minmax(100px, auto)
+}
+
+.banner {
+  background-color: RGB(0,120,215);
+  color: white;
+  text-align: center;
+  font-size: 36px;
+}
+
+.data-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+span.amp {
+  font-family:Baskerville,"Goudy Old Style","Palatino","Book Antiqua",serif;
+  font-size:4em;
+  vertical-align: middle;
+  padding-left: 25px;
+  padding-right: 25px;
+}
+
+.table {
+  font-size: 2em;
+}
+
+.productRect {
+  stroke: blue;
+  stroke-width: 3px;
+  fill-opacity: 0.0;
+}
+
+.productText {
+  fill:red;
+  font-size: 2em;
+  font-weight: bold;
+}

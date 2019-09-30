@@ -1,0 +1,57 @@
+<!-- 
+  The main display that shows the information in 3 sections
+  1) A top level banner with demo header
+  2) A middle section with an svg image where the information
+     received is drawn on the shelf in differing colors.  
+     By coloring the information differently on the shelves, 
+     a human-user can quickly perceive what is occurring.
+  3) A bottom section with tables that give the textual 
+     representation of received data so a human-user can 
+     read any additional information as needed.
+-->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>In-Store Void Notification Sample</title> 
+  <script src="js/jquery-3.3.1.min.js"></script>
+  <link rel="stylesheet" href="css/styles.css" />
+  <!-- Bootstrap.js 4.1.3 is used extensively for styling-->
+  <link rel="stylesheet" href="css/bootstrap_4_1_3.min.css">   
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="banner">Azure IoT Edge HMI - In-Store Void Notification Sample</div>
+    <div class="data-grid">
+        <!-- Shelf image with components overlaid-->
+          <!-- 
+            svg width/height are based on the height of the jpg
+            image element requires width and height
+          -->
+        <div style="min-height: 966px;">
+          <svg id="shelfSvg" width="1024" height="966" >
+              <image href="images\supermarket-shelf_1024px_gray_void_pixabay.jpg" width="1024" height="966" alt="Grocery store shelf image"></image>
+              <!--Component Rectangles and Text  will be inserted here-->
+              <!-- <rect >-->
+              <!-- <text x="165" y="230">U26</text>-->          
+          </svg>
+        </div>
+
+          <!-- Table data -->
+          <div class="table-responsive" style="margin-top: 18px; ">
+              <table class="table table-bordered table-striped" id="shelf_table">
+                <tr>
+                  <th>Item</th>
+                  <th>Void Status</th>
+                </tr>
+              </table>
+          </div>        
+      </div>
+  </div>
+  <script src="js/site.js"></script>
+  <script src="js/signalr.js"></script> <!--copied from the npm install of 1.0.4 for local deployment-->
+</body>
+</html>
