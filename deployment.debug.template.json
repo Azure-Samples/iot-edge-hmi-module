@@ -38,7 +38,7 @@
             "restartPolicy": "always",
             "settings": {
               "image": "${MODULES.WebApp.amd64.debug}",
-              "createOptions": "{\"ExposedPorts\": {\"8080/tcp\": {}},\"Env\":[\"UseInProcDataGenerator=FALSE\"],\"HostConfig\": {\"PortBindings\": {\"8080/tcp\": [{\"HostPort\": \"8080\"}]}}}"
+              "createOptions": "{\"ExposedPorts\": {\"8080/tcp\": {}},\"Env\":[\"UseInProcDataGenerator=TRUE\"],\"HostConfig\": {\"PortBindings\": {\"8080/tcp\": [{\"HostPort\": \"8080\"}]}}}"
             }
           }
         }
