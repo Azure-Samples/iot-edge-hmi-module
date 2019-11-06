@@ -242,7 +242,7 @@ IoT EdgeHub Dev Tool. Below are the prerequisites to build and run the sample on
 1. Build and Run the solution
 
    Select the *deployment.template.json* file in the VS Code Explorer pane (file explorer) and right click to display 
-   the context menu. Select *Build and Run IoT Edge Solution*.
+   the context menu. Select *Build and Run IoT Edge Solution in Simulator*.
 
    This command issues *docker build* command for each module in the selected deployment manifest.
 
