@@ -16,11 +16,15 @@ using Microsoft.Extensions.Hosting;
 using System.Threading;
 using System.Collections.Concurrent;
 using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace WebApp {
 
     public class InProcShelfDataGenerator : BackgroundService
     {
+        readonly ILogger<InProcShelfDataGenerator> _logger;
+
         private IBackgroundShelfQueue shelfQueue {get; set;}
 
         //The product names are defined on the shelf itself.  See the wwwroot/js/site.js code for the image layout.
@@ -40,16 +44,17 @@ namespace WebApp {
             "Corned Beef"
         };
 
-        public InProcShelfDataGenerator(IBackgroundShelfQueue shelfQueue)
+        public InProcShelfDataGenerator(IBackgroundShelfQueue shelfQueue, ILogger<InProcShelfDataGenerator> logger)
         {
             this.shelfQueue = shelfQueue;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
         
         public async Task QueueShelf(Shelf productData)
         {
             try 
             {
-                Console.WriteLine($"Number of products on shelf: {productData.Products.Length}");
+                _logger.LogInformation($"Number of products on shelf: {productData.Products.Length}");
 
                 if(shelfQueue.Count() > 120) 
                 {
@@ -61,24 +66,24 @@ namespace WebApp {
 
                 // exit early if we dont have a deserialized element and a serial number
                     if(productData != null) {
-                        Console.WriteLine("Shelf Data Generator queueing in progress...");
+                        _logger.LogInformation("Shelf Data Generator queueing in progress...");
                         shelfQueue.QueueShelf(productData);
                     }
             } 
             catch (AggregateException ex)
             {
-                Console.WriteLine($"Error processing message: {ex.Flatten()}");
+                _logger.LogInformation($"Error processing message: {ex.Flatten()}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error processing message: {ex}");
+                _logger.LogInformation($"Error processing message: {ex}");
             }
         }
         
         static Random rd = new Random();  
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            Console.WriteLine("Initializing shelf generation.");
+            _logger.LogInformation("Initializing shelf generation.");
             
             while(!stoppingToken.IsCancellationRequested) 
             {
@@ -93,7 +98,7 @@ namespace WebApp {
                 
                 await Task.Delay(TimeSpan.FromSeconds(2));
             }
-            Console.WriteLine("Cancellation requested.");
+            _logger.LogInformation("Cancellation requested.");
         }
     }
 }
