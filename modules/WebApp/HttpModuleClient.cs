@@ -21,6 +21,7 @@ using System.Threading;
 using System.Collections.Concurrent;
 using Newtonsoft.Json.Linq;
 using Microsoft.Azure.Devices.Client.Transport.Mqtt;
+using Microsoft.Extensions.Logging;
 
 namespace WebApp {
 
@@ -30,12 +31,15 @@ https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services?v
 */
     public class HttpModuleClient : BackgroundService
     {           
+        readonly ILogger<HttpModuleClient> _logger;
+
         private IBackgroundShelfQueue shelfQueue {get; set;}
         private ModuleClient moduleClient {get; set;}
 
-        public HttpModuleClient(IBackgroundShelfQueue shelfQueue)
+        public HttpModuleClient(IBackgroundShelfQueue shelfQueue, ILogger<HttpModuleClient> logger)
         { 
             this.shelfQueue = shelfQueue;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
         
         /*The PipeMessage method is what will connect to the IoT Edge Hub and will queue the shelf data
@@ -61,7 +65,7 @@ https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services?v
             if (!string.IsNullOrEmpty(messageString))
             {
                 try{
-                    Console.WriteLine($"Receiving Message: {messageString.TrimStart('"').TrimEnd('"').Replace('\\', ' ')}");
+                    _logger.LogInformation($"Receiving Message: {messageString.TrimStart('"').TrimEnd('"').Replace('\\', ' ')}");
                     Shelf productData = JsonConvert.DeserializeObject<Shelf>
                         (messageString.TrimStart('"').TrimEnd('"').Replace("\\",String.Empty));
 
@@ -70,21 +74,21 @@ https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services?v
                     if(shelfQueue.Count() > 120){
                         while(shelfQueue.Count() > 120){
                             await shelfQueue.DequeueAsync(new CancellationToken()); //throw away result
-                            Console.WriteLine("Dequeing Extra live shelves.");
+                            _logger.LogInformation("Dequeing Extra live shelves.");
                         }
                     }
                     if(productData != null) {
                         // Use appropriate shelfQueue based on count.
                         if(productData.Products.Count() == 0){
-                            Console.WriteLine("Queuing 'Live' Feed for displaying in WebApp.");
+                            _logger.LogInformation("Queuing 'Live' Feed for displaying in WebApp.");
                             shelfQueue.QueueShelf(productData);
                         } 
                     }
                 // catch and swallow exceptions 
                 } catch (AggregateException ex){
-                    Console.WriteLine($"Error processing message: {ex.Flatten()}");
+                    _logger.LogError($"Error processing message: {ex.Flatten()}");
                 } catch (Exception ex){
-                    Console.WriteLine($"Error processing message: {ex}");
+                    _logger.LogError($"Error processing message: {ex}");
                 }
             }
             return MessageResponse.Completed;
@@ -104,7 +108,7 @@ https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services?v
             this.moduleClient = await ModuleClient.CreateFromEnvironmentAsync(settings);
             await moduleClient.OpenAsync();
             await moduleClient.SetInputMessageHandlerAsync("webAppInput", PipeMessage, moduleClient);
-            Console.WriteLine("IoT Hub module client initialized.");
+            _logger.LogInformation("IoT Hub module client initialized.");
         }
     }
 

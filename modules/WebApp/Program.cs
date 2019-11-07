@@ -13,8 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace WebApp
 {
@@ -22,7 +21,26 @@ namespace WebApp
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args).Build().Run();
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .CreateLogger();
+                    
+            try
+            {
+                Log.Information("Starting web host");
+                CreateWebHostBuilder(args).Build().Run();
+                return;
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Host terminated unexpectedly");
+                return;
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
@@ -32,6 +50,7 @@ namespace WebApp
             
             WebHost.CreateDefaultBuilder(args)
                 .UseUrls("http://*:8080")
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .UseSerilog();
     }
 }
