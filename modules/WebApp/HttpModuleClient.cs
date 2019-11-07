@@ -86,9 +86,9 @@ https://docs.microsoft.com/en-us/aspnet/core/fundamentals/host/hosted-services?v
                     }
                 // catch and swallow exceptions 
                 } catch (AggregateException ex){
-                    _logger.LogInformation($"Error processing message: {ex.Flatten()}");
+                    _logger.LogError($"Error processing message: {ex.Flatten()}");
                 } catch (Exception ex){
-                    _logger.LogInformation($"Error processing message: {ex}");
+                    _logger.LogError($"Error processing message: {ex}");
                 }
             }
             return MessageResponse.Completed;

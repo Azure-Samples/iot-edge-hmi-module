@@ -72,11 +72,11 @@ namespace WebApp {
             } 
             catch (AggregateException ex)
             {
-                _logger.LogInformation($"Error processing message: {ex.Flatten()}");
+                _logger.LogError($"Error processing message: {ex.Flatten()}");
             }
             catch (Exception ex)
             {
-                _logger.LogInformation($"Error processing message: {ex}");
+                _logger.LogError($"Error processing message: {ex}");
             }
         }
         
