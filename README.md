@@ -164,7 +164,7 @@ IoT EdgeHub Dev Tool. Below are the prerequisites to build and run the sample on
 
    There are 2 ways to create an Azure IoT Edge device from Visual Studio Code:
 
-   Open the command palette and search for *Azure IoT Hub: Create IoT Edge Device*. 
+   Open the command palette and search for *Azure IoT Edge: Create IoT Edge Device*. 
 
    ​	**or**
 
